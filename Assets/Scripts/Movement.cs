@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private Rigidbody rb;
     public float speed;
     public float acceleration;
+    public float timeTillAccel;
+    public float intervalBetweenAccel;
     // Start is called before the first frame update
+    void increaseSpeed()
+    {
+        speed = speed + acceleration;
+    }
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.velocity = -transform.forward * speed;
+        InvokeRepeating("increaseSpeed", timeTillAccel, intervalBetweenAccel);
     }
 
     // Update is called once per frame
     void Update()
     {
-        speed += Time.deltaTime * acceleration;
-        rb.velocity = transform.forward * speed;
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 }
