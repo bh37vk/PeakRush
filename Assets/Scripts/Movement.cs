@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float speed;
-    public float acceleration;
-    public float timeTillAccel;
-    public float intervalBetweenAccel;
+    public int speed;
+    public int acceleration;
+    public int timeTillAccel;
+    public int intervalBetweenAccel;
     // Start is called before the first frame update
     void increaseSpeed()
     {

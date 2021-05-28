@@ -10,10 +10,22 @@ public class RagdollDeath : MonoBehaviour
     private Rigidbody[] ragdollBodies;
     private Collider[] ragdollColliders;
 
-    public Collider gameObject;
+    public Collider boxCollider;
 
     public Camera cam1;
     public GameObject cam2;
+
+    public GameObject HUD;
+    public GameObject HUDscore;
+
+    public int goalValue = 100;
+
+    public GameObject player;
+    public int playerScore;
+    private int increase = 1;
+
+    public int timeTillAccel;
+    public int intervalBetweenAccel;
 
     private void Start()
     {
@@ -21,11 +33,22 @@ public class RagdollDeath : MonoBehaviour
         ragdollColliders = GetComponentsInChildren<Collider>();
 
         ToggleRagdollOff();
-        gameObject.enabled = true;
+        boxCollider.enabled = true;
 
         cam1.enabled = true;
         cam2.SetActive(false);
+
+        HUDscore.SetActive(true);
+
+        InvokeRepeating("AddScore", timeTillAccel, intervalBetweenAccel);
     }
+
+    private void AddScore()
+    {
+        playerScore += increase;
+    }
+
+
     private void Die()
     {
         GameObject movement = GameObject.FindWithTag("Player");
@@ -33,15 +56,24 @@ public class RagdollDeath : MonoBehaviour
         GameObject horizMovement = GameObject.FindWithTag("Player");
         horizMovement.GetComponent<PlayerMovement>().enabled = false;
         ToggleRagdollOn();
+        CancelInvoke();
 
+        HUDscore.SetActive(false);
+        HUD.SetActive(true);
         cam2.SetActive(true);
     }
+
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Obstacle"))
         {
             Die();
+        }
+        if (other.gameObject.CompareTag("Goal"))
+        {
+            playerScore = playerScore + goalValue;
+            Destroy(other.gameObject);
         }
     }
 
